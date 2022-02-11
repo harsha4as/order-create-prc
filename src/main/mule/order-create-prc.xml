@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<sub-flow name="order-create-prc" doc:id="99af4084-129c-489b-acba-befdd7bbbdce" >
+		<logger level="INFO" doc:name="before calling rules engine" doc:id="e9832933-8625-4345-ae02-3dd121bc7966" message='#["Before Calling Rules Engine" ++ " " ++ payload.order.sourceOrderId ++ " " ++ payload.order.source]'/>
+		<http:request method="GET" doc:name="call rules engine" doc:id="a4883580-b227-4886-9894-b2fc10dc88a0" config-ref="rules-engine-sys-api-http-request-config" path="/salesOrderTranslation" target="sapSourceSystemCode">
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"sourceSystemName" : payload.order.source
+}]]]></http:query-params>
+		</http:request>
+		<logger level="INFO" doc:name="after calling rules engine" doc:id="f7af94b4-f936-431a-b19e-078dc8b3d53d" message='#["After Calling Rules Engine" ++ payload.order.sourceOrderId ++ payload.order.source]'/>
+		<http:request method="GET" doc:name="call sfdc sys api" doc:id="788e0b3e-997c-4ab4-b45e-667af635b0de" config-ref="customer-sfdc-sys-http-request-config" path="/customerInfo" target="customerInfo">
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"Id" : payload.order.partyId
+}]]]></http:query-params>
+		</http:request>
+		<logger level="INFO" doc:name="after calling sfdc to get customerinfo" doc:id="0325ee69-26dd-4df6-a8c7-21c20f0ca881" message='#["after calling sfdc"]'/>
+		<ee:transform doc:name="add sap source system code" doc:id="02c150c6-da61-4626-8a40-10b973f2f915" >
+			<ee:message >
+				<ee:set-payload resource="dwl/add-sap-source-system-code.dwl" />
+			</ee:message>
+		</ee:transform>
+		<http:request method="POST" doc:name="call order sap sys" doc:id="ac9ede7c-7580-41f4-af1a-0755eb011f48" config-ref="order-sap-sys-https-request-config" path="/createOrder"/>
+		<logger level="INFO" doc:name="after calling order sap sys" doc:id="8ff7c81e-b42e-4489-88c2-7cc7c1b2ab79" message='#["after calling order sap sys"]'/>
+		<ee:transform doc:name="create response" doc:id="6fa7e209-2e0d-46c0-933e-e63bf494f6dc">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	message: "Order Received"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+</mule>

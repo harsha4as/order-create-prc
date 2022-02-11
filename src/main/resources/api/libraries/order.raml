@@ -1,0 +1,57 @@
+#%RAML 1.0 Library
+usage: contains order canonical information
+
+types:
+  submitOrderRequest:
+    type: object
+    properties:
+      order:
+        type: object
+        properties:
+          sourceOrderId: string
+          source: string
+          type: string
+          creationChannel: string
+          distributionChannel: string
+          countryPlacedFrom: string
+          currency: string
+          orderDateTime: string
+          receivedDateTime: string
+          requestedDeliveryDate: string
+          salesLegalEntity: string
+          language: string
+          partyId: string
+          amount:
+            type: array
+            items:
+              type: object
+              properties:
+                type: string
+                value: string
+          alternateIdentifier:
+            type: array
+            items:
+              type: object
+              properties:
+                systemIdentifier: string
+                systemCode: string
+          lineItem:
+            type: array
+            items:
+              type: object
+              properties:
+                 lineItemIdentifier?: string
+                 sourceLineItemNumber?: string
+                 quantity?: integer
+                 status?: string
+                 createdDateTime?: string
+                 fulfillmentEntity?: string
+                 product?:
+                   type: object
+                   properties:
+                     sourceSytemProductId?: string
+
+
+
+
+

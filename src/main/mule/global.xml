@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:request-config name="rules-engine-sys-api-http-request-config" doc:name="HTTP Request configuration" doc:id="d73811f9-5516-4c80-bc88-d49f69869fa0" responseTimeout="${httpRequest.timeouts.response}">
+		<http:request-connection host="${rules-engine-sys-api.host}" maxConnections="${httpRequest.maxConnections}" connectionIdleTimeout="${httpRequest.timeouts.idle}" responseBufferSize="${httpRequest.responseBufferSize}"/>
+	</http:request-config>
+	<http:request-config name="customer-sfdc-sys-http-request-config" doc:name="HTTP Request configuration" doc:id="443c82e1-653f-4521-98bf-d77aac423d04" responseTimeout="${httpRequest.timeouts.response}">
+		<http:request-connection host="${customer-sfdc-sys-api.host}" maxConnections="${httpRequest.maxConnections}" connectionIdleTimeout="${httpRequest.timeouts.idle}" responseBufferSize="${httpRequest.responseBufferSize}"/>
+	</http:request-config>
+	<configuration-properties doc:name="Configuration properties" doc:id="8b2c8daa-516d-43aa-b2f4-5516d6602553" file="properties/${mule.env}.yaml" />
+	<http:request-config name="order-sap-sys-https-request-config" doc:name="HTTP Request configuration" doc:id="6ed8ef90-b5fc-409a-bc12-8365cb8e3298" responseTimeout="${httpRequest.timeouts.response}">
+		<http:request-connection host="${order-sap-sys-api.host}" maxConnections="${httpRequest.maxConnections}" connectionIdleTimeout="${httpRequest.timeouts.idle}" responseBufferSize="${httpRequest.responseBufferSize}"/>
+	</http:request-config>
+	<global-property doc:name="Global Property" doc:id="3eedff58-3274-4b45-a0db-dfcab38d74f9" name="mule.env" value="local" />
+</mule>

@@ -1,0 +1,40 @@
+# This API's config
+api:
+  id: "17489374" # replace with real id once added to api manager
+  client-id: ""
+  host: "0.0.0.0"
+  basePath: "/*"
+
+# Cloudhub HTTP listener ports
+http:
+  port: "8081"
+  private:
+    port: "8091"
+https:
+  port: "8082"
+  private:
+    port: "8092"
+
+# General HTTP requester config
+httpRequest:
+  maxConnections: "-1"
+  responseBufferSize: "1024"
+  timeouts:    
+    connection: "30000"
+    idle: "3000"
+    response: "30000"
+  reconnection:
+    frequency: "500"
+    attempts: "3"
+
+rules-engine-sys-api:
+  host: "dev-order-rules-engine-sys.us-e2.cloudhub.io"
+  port: "8081"
+  
+customer-sfdc-sys-api:
+  host: "dev-customer-sfdc-sys.us-e2.cloudhub.io"
+  port: "8081"    
+  
+order-sap-sys-api:
+  host: "dev-order-sap-sys.us-e2.cloudhub.io"
+  port: "8081" 

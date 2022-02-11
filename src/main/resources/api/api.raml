@@ -1,0 +1,21 @@
+#%RAML 1.0
+title: Sales Order Process API
+mediaType: application/json
+version: 1
+
+uses:
+  OrderRequest: libraries/order.raml
+
+/orders:
+  post: 
+    body:
+      application/json:
+        type: OrderRequest.submitOrderRequest
+        examples:
+          input: !include examples/order.raml
+    responses:
+      200:
+        body:
+          application/json:
+            example:
+              message: Success     
